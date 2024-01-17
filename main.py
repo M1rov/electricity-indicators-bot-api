@@ -8,5 +8,7 @@ bot = telebot.TeleBot(BOT_TOKEN)
 # Налаштування хендлерів
 setup_handlers(bot)
 
+print('Bot started!')
+
 # Постійний polling
 bot.polling()
