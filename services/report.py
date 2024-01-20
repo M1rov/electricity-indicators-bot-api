@@ -1,8 +1,9 @@
+from db import session
 from models import Report
 
 
 class ReportService:
-    def __init__(self, session):
+    def __init__(self):
         self.session = session
 
     def add_report(self, chat_id, message):

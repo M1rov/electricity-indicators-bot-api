@@ -2,8 +2,10 @@ import json
 import random
 
 import torch
+
+from .message_handlers import message_handlers
 from model import NeuralNet
-from utils import tokenize, bag_of_words
+from nltk_utils import tokenize, bag_of_words
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -24,8 +26,8 @@ model.load_state_dict(model_state)
 model.eval()
 
 
-def get_response(msg):
-    sentence = tokenize(msg)
+def send_response(message, bot):
+    sentence = tokenize(message.text)
     X = bag_of_words(sentence, all_words)
     X = X.reshape(1, X.shape[0])
     X = torch.from_numpy(X).to(device)
@@ -38,11 +40,15 @@ def get_response(msg):
     probs = torch.softmax(output, dim=1)
     prob = probs[0][predicted.item()]
     print(prob.item())
-    if prob.item() > 0.75:
-        for intent in intents:
-            if tag == intent["tag"]:
-                return random.choice(intent['responses'])
+    if prob.item() < 0.75:
+        raise Exception(
+            "Нажаль, я поки що не можу відповісти на ваше питання. Проте, ваше повідомлення було відправлено у " \
+            "підтримку і буде оброблено у найближчий час.")
 
-    raise Exception("Нажаль, я поки що не можу відповісти на ваше питання. Проте, ваше повідомлення було відправлено у " \
-           "підтримку і буде оброблено у найближчий час.")
+    for intent in intents:
+        if tag == intent["tag"]:
+            if 'handler' in intent:
+                return message_handlers[intent['handler']](bot).start(message)
 
+            response = random.choice(intent['responses'])
+            bot.send_message(message.chat.id, response)

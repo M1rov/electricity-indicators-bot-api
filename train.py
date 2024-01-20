@@ -6,7 +6,7 @@ import torch.nn as nn
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset, DataLoader, TensorDataset
 
-from utils import bag_of_words, tokenize, stem
+from nltk_utils import bag_of_words, tokenize, stem
 from model import NeuralNet
 
 with open('./dataset.json', 'r') as f:
@@ -54,7 +54,7 @@ X_test = np.array(X_test)
 y_test = np.array(y_test)
 
 # Hyper-parameters
-num_epochs = 1000
+num_epochs = 2000
 batch_size = 8
 learning_rate = 0.001
 input_size = len(X_test[0])
