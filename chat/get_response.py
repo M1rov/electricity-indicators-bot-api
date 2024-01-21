@@ -5,7 +5,7 @@ import torch
 
 from .message_handlers import message_handlers
 from model import NeuralNet
-from nltk_utils import tokenize, bag_of_words
+from nltk_utils import tokenize, vectorize
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
@@ -28,7 +28,7 @@ model.eval()
 
 def send_response(message, bot):
     sentence = tokenize(message.text)
-    X = bag_of_words(sentence, all_words)
+    X = vectorize(sentence, all_words)
     X = X.reshape(1, X.shape[0])
     X = torch.from_numpy(X).to(device)
 

@@ -15,7 +15,6 @@ def setup_handlers(bot: telebot.TeleBot):
     def handle_message(message):
         try:
             send_response(message, bot)
-            print(message.from_user.id, 'user id ')
         except Exception as error:
             ReportService().add_report(message.chat.id, message.text)
             bot.send_message(message.chat.id, error.__str__())

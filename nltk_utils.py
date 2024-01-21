@@ -1,44 +1,42 @@
 import numpy as np
 import nltk
-# nltk.download('punkt')
 from nltk.stem.porter import PorterStemmer
+
 stemmer = PorterStemmer()
+
+lemmatizer = nltk.WordNetLemmatizer()
 
 
 def tokenize(sentence):
     """
-    split sentence into array of words/tokens
-    a token can be a word or punctuation character, or number
+    розділяємо речення на список токенів
+    (токеном може бути слово, знак пунктуації, або число)
     """
     return nltk.word_tokenize(sentence)
 
 
-def stem(word):
+def lemmatize_token(token):
     """
-    stemming = find the root form of the word
-    examples:
-    words = ["organize", "organizes", "organizing"]
-    words = [stem(w) for w in words]
-    -> ["organ", "organ", "organ"]
+    лематизуємо слово, тобто беремо його початкову форму
     """
-    return stemmer.stem(word.lower())
+    return lemmatizer.lemmatize(token.lower())
 
 
-def bag_of_words(tokenized_sentence, words):
+def vectorize(tokenized_sentence, words):
     """
-    return bag of words array:
-    1 for each known word that exists in the sentence, 0 otherwise
-    example:
-    sentence = ["hello", "how", "are", "you"]
-    words = ["hi", "hello", "I", "you", "bye", "thank", "cool"]
-    bog   = [  0 ,    1 ,    0 ,   1 ,    0 ,    0 ,      0]
+    Перетворює речення у вектор (мішок слів), де кожен елемент вектора відповідає
+    присутності слова з заданого словника в реченні. Для кожного слова зі словника,
+    вектор містить 1, якщо це слово присутнє у реченні, та 0, якщо відсутнє.
+    Приклад:
+    tokenized_sentence = ["привіт", "мене", "звуть", "електробот"]
+    words = ["хай", "привіт", "як", "справи", "мене", "називають", "звуть"]
+    vector   = [0 , 1 , 0 , 0 , 1 , 0 , 1]
     """
-    # stem each word
-    sentence_words = [stem(word) for word in tokenized_sentence]
-    # initialize bag with 0 for each word
-    bag = np.zeros(len(words), dtype=np.float32)
+    sentence_words = [lemmatize_token(word) for word in tokenized_sentence]
+    # ініціалізуємо мультимасив з нулями за довжиною слов
+    vector = np.zeros(len(words), dtype=np.float32)
     for idx, w in enumerate(words):
         if w in sentence_words:
-            bag[idx] = 1
+            vector[idx] = 1
 
-    return bag
+    return vector
