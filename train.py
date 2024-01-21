@@ -52,20 +52,20 @@ batch_size = 8
 learning_rate = 0.001
 hidden_size = 8
 input_size = len(all_words)
-output_size = len(tags)
+num_classes = len(tags)
 
 dataset = ChatDataset(X_test, y_test)
 loader = DataLoader(dataset=dataset, batch_size=batch_size, shuffle=False, num_workers=0)
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
-model = NeuralNet(input_size, hidden_size, output_size).to(device)
+model = NeuralNet(input_size, hidden_size, num_classes).to(device)
 
 # Ініціалізація функцій втрати та оптимізатора
 criterion = nn.CrossEntropyLoss()
 optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
 
-# Train the model
+# Тренування моделі
 for epoch in range(num_epochs):
     for (words, labels) in loader:
         words = words.to(device)
@@ -88,7 +88,7 @@ data = {
     "model_state": model.state_dict(),
     "input_size": input_size,
     "hidden_size": hidden_size,
-    "output_size": output_size,
+    "output_size": num_classes,
     "all_words": all_words,
     "tags": tags,
 }

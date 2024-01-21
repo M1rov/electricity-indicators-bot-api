@@ -39,7 +39,7 @@ def send_response(message, bot):
 
     probs = torch.softmax(output, dim=1)
     prob = probs[0][predicted.item()]
-    print(prob.item())
+    print('item prob:', prob.item())
     if prob.item() < 0.75:
         raise Exception(
             "Нажаль, я поки що не можу відповісти на ваше питання. Проте, ваше повідомлення було відправлено у " \

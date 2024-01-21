@@ -6,7 +6,8 @@ from services.report import ReportService
 def setup_handlers(bot: telebot.TeleBot):
     @bot.message_handler(commands=['start'])
     def send_welcome(message):
-        bot.reply_to(message, "Привіт! Я твій діалоговий агент для передачі показників електроенергії.")
+        bot.reply_to(message, "Привіт! Я твій діалоговий агент для передачі показників електроенергії. Чим можу "
+                              "допомогти?")
 
     # Тут можна додати інші хендлери
 

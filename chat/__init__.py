@@ -1,2 +1,2 @@
-from .get_response import send_response
+from .send_response import send_response
 from .message_handlers import message_handlers

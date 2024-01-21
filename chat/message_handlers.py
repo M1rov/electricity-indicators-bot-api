@@ -129,9 +129,7 @@ class ViewRecordingHandler(MessageHandler):
         self.bot.send_message(message.chat.id,
                               f'Виводжу інформацію за {f"{self.period} {get_months_plural(self.period)} (починаючи з {monthsGenitive[self.month]} {self.year} року)" if self.period > 1 else f"{months[self.month].lower()} {self.year} року"}')
         recordings = ElectricityService().get_recording(message.from_user.id, self.period, self.month, self.year)
-        print(recordings, 'test')
         self.bot.send_message(message.chat.id, '\n'.join([format_electricity_recording(rec) for rec in recordings]))
-
 
 
 message_handlers = {
